@@ -6,22 +6,24 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Net;
+using System.IO;
 
 namespace DataCreator
 {
-    public partial class Form1 : Form
+    public partial class ContentCreator : Form
     {
         private string m_filePath;
         private int m_width, m_height;
-
-        public Form1()
+        public ContentCreator()
         {
-            InitializeComponent();
-            openFileDialog1.Filter = "Image Files (*.jpg, *.png)|*.jpg;*.png";
+            m_filePath = null;
+            InitializeComponent();            
         }
 
         private void selectImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            openFileDialog1.Filter = "Image Files (*.jpg, *.png)|*.jpg;*.png";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 m_filePath = openFileDialog1.FileName;
@@ -38,9 +40,23 @@ namespace DataCreator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            SpecifySubimage s = new SpecifySubimage(m_width, m_height);
-            s.Show();
+            if (m_filePath != null)
+            {
+                this.Hide();
+                SpecifySubimage s = new SpecifySubimage(m_width, m_height, m_filePath);
+                s.Show();
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Vuforia data (*.xml)|*.xml";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                this.Hide();
+                SpecifyImageParameters s = new SpecifyImageParameters(openFileDialog1.FileName);
+                s.Show();
+            }
         }
     }
 }
